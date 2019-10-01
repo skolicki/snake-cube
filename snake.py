@@ -12,11 +12,11 @@ def move(cube, pos, legs, path, dir):
         cube[pos[0]][pos[1]][pos[2]] = 1
     return check(cube, pos, legs[1:], path + [pos])
 
-def check(cube, pos, legs, moves):
+def check(cube, pos, legs, path):
     if not legs:
-        print(moves)
+        print(path)
         return True
-    return any(move(copy.deepcopy(cube), pos, legs, moves, dir) for dir in ([-1, 0, 0], [1, 0, 0], [0, -1, 0], [0, 1, 0], [0, 0, -1], [0, 0, 1]))
+    return any(move(copy.deepcopy(cube), pos, legs, path, dir) for dir in ([-1, 0, 0], [1, 0, 0], [0, -1, 0], [0, 1, 0], [0, 0, -1], [0, 0, 1]))
 
 check(
     [[[1, 0, 0], [0, 0, 0], [0, 0, 0]], [[0, 0, 0], [0, 0, 0], [0, 0, 0]], [[0, 0, 0], [0, 0, 0], [0, 0, 0]]],  # already fill at [0, 0, 0]
