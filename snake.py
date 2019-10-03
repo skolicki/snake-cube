@@ -4,22 +4,20 @@
 
 import copy
 
-def move(cube, pos, legs, path, dir):
+def move(cube, pos,  dir, legs, path):
+    if not legs:
+        print(path)  # short-curcuiting any will execute this once
+        return True
     for d in range(legs[0]):
         pos = [pos[i] + dir[i] for i in range(3)]
-        if not all(pos[i] in (0, 1, 2) for i in range(3)) or cube[pos[0]][pos[1]][pos[2]]:
+        if not all(pos[i] in range(3) for i in range(3)) or cube[pos[0]][pos[1]][pos[2]]:
             return False
         cube[pos[0]][pos[1]][pos[2]] = 1
-    return check(cube, pos, legs[1:], path + [pos])
+    return any(move(copy.deepcopy(cube), pos, legs[1:], path + [pos], dir) for dir in ([-1, 0, 0], [1, 0, 0], [0, -1, 0], [0, 1, 0], [0, 0, -1], [0, 0, 1]))
 
-def check(cube, pos, legs, path):
-    if not legs:
-        print(path)
-        return True
-    return any(move(copy.deepcopy(cube), pos, legs, path, dir) for dir in ([-1, 0, 0], [1, 0, 0], [0, -1, 0], [0, 1, 0], [0, 0, -1], [0, 0, 1]))
-
-check(
+move(
     [[[1, 0, 0], [0, 0, 0], [0, 0, 0]], [[0, 0, 0], [0, 0, 0], [0, 0, 0]], [[0, 0, 0], [0, 0, 0], [0, 0, 0]]],  # already fill at [0, 0, 0]
     [0, 0, 0],  # 4 legs of length 2 implies starting in a corner
+    [1, 0, 0],  # first direction is arbitrary due to rotation/symmetry
     [2, 2, 2, 2, 1, 1, 1, 2, 2, 1, 1, 2, 1, 2, 1, 1, 2],  # hardcoded physical toy
     [])
